@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Pembelajaran Interaktif: Menulis Teks LHO - SMPN 1 Dlingo</title>
+  <style>
+    :root {
+      --primary-navy: #1e3a8a;
+      --secondary-blue: #0284c7;
+      --accent-teal: #0d9488;
+      --bg-slate: #f8fafc;
+      --card-white: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --correct-green: #16a34a;
+      --correct-bg: #dcfce7;
+      --wrong-red: #dc2626;
+      --wrong-bg: #fee2e2;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-slate);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--primary-navy), var(--secondary-blue));
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* NAV TABS */
+    nav.nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 110px;
+      z-index: 90;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .nav-btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+
+    .nav-btn.active {
+      color: var(--primary-navy);
+      border-bottom-color: var(--secondary-blue);
+    }
+
+    .nav-btn:hover {
+      color: var(--secondary-blue);
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARD COMPONENTS */
+    .card {
+      background: var(--card-white);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-color);
+    }
+
+    .card h2 {
+      color: var(--primary-navy);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--secondary-blue);
+      padding-left: 10px;
+    }
+
+    /* MATERI STYLES */
+    .structure-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .struct-card {
+      background: #f1f5f9;
+      padding: 1.2rem;
+      border-radius: 8px;
+      border-top: 4px solid var(--accent-teal);
+    }
+
+    .struct-card h3 {
+      color: var(--primary-navy);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .example-box {
+      background: #e0f2fe;
+      border-left: 4px solid var(--secondary-blue);
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+    }
+
+    /* KUIS STYLES */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 20%;
+      background: var(--secondary-blue);
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--text-dark);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .option-btn {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--secondary-blue);
+      background: #f0f9ff;
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary-navy);
+      background: #e0f2fe;
+    }
+
+    .option-btn.correct-ans {
+      border-color: var(--correct-green);
+      background: var(--correct-bg);
+      color: #14532d;
+      font-weight: 600;
+    }
+
+    .option-btn.wrong-ans {
+      border-color: var(--wrong-red);
+      background: var(--wrong-bg);
+      color: #7f1d1d;
+    }
+
+    /* ISIAN SINGKAT */
+    .input-answer {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    .input-answer:focus {
+      border-color: var(--secondary-blue);
+    }
+
+    /* MENJODOHKAN */
+    .matching-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .matching-item {
+      padding: 0.8rem;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .matching-select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.4rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* FEEDBACK CARD */
+    .feedback-box {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      border-radius: 8px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-box.correct {
+      background: var(--correct-bg);
+      border: 1px solid var(--correct-green);
+      color: #14532d;
+    }
+
+    .feedback-box.wrong {
+      background: var(--wrong-bg);
+      border: 1px solid var(--wrong-red);
+      color: #7f1d1d;
+    }
+
+    .action-btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+
+    .btn-main {
+      background: var(--secondary-blue);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-main:hover {
+      background: var(--primary-navy);
+    }
+
+    .btn-main:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    /* RESULT SCORE */
+    .score-card {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .score-number {
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--primary-navy);
+      margin: 1rem 0;
+    }
+
+    /* CONCEPT MAP */
+    .concept-map {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 1.5rem 0;
+    }
+
+    .concept-node {
+      background: var(--primary-navy);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      width: 80%;
+    }
+
+    .concept-branches {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .concept-child {
+      background: #e0f2fe;
+      border: 2px solid var(--secondary-blue);
+      padding: 0.8rem;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+
+    footer strong {
+      color: #f8fafc;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.4rem; }
+      nav.nav-tabs { top: 120px; }
+      .nav-btn { padding: 0.8rem 0.8rem; font-size: 0.85rem; }
+      .matching-container { grid-template-columns: 1fr; }
+      .concept-branches { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Media Pembelajaran Interaktif: Menulis Teks LHO</h1>
+    <p>Bahasa Indonesia - Kelas VIII SMP (Semester Ganjil)</p>
+    <div class="badge-bar">
+      <span class="badge">SMP Negeri 1 Dlingo</span>
+      <span class="badge">T.P. 2026/2027</span>
+      <span class="badge">Pembelajaran Mendalam</span>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="nav-tabs">
+    <button class="nav-btn active" onclick="switchTab('materi')">📖 Modul Materi</button>
+    <button class="nav-btn" onclick="switchTab('kuis')">✏️ Kuis Interaktif</button>
+    <button class="nav-btn" onclick="switchTab('refleksi')">💡 Refleksi & Peta Konsep</button>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+
+    <!-- TAB 1: MATERI -->
+    <div id="materi" class="tab-content active">
+      <div class="card">
+        <h2>Tujuan Pembelajaran (SMART)</h2>
+        <p>Melalui media interaktif ini, kamu diharapkan dapat <strong>menyusun Teks Laporan Hasil Observasi (LHO)</strong> yang utuh dan baku dengan memenuhi struktur utama (Pernyataan Umum, Deskripsi Bagian, Deskripsi Manfaat) serta kebahasaan yang akurat minimal <strong>80%</strong>.</p>
+      </div>
+
+      <div class="card">
+        <h2>Struktur Utama Teks LHO</h2>
+        <div class="structure-grid">
+          <div class="struct-card">
+            <h3>1. Pernyataan Umum</h3>
+            <p>Berisi pembuka, pengenalan objek, klasifikasi, atau definisi umum mengenai objek yang diobservasi.</p>
+          </div>
+          <div class="struct-card">
+            <h3>2. Deskripsi Bagian</h3>
+            <p>Berisi rincian fisik, gambaran spesifik, ciri-ciri khusus, atau bagian-bagian dari objek secara detail.</p>
+          </div>
+          <div class="struct-card">
+            <h3>3. Deskripsi Manfaat</h3>
+            <p>Berisi penjelasan mengenai fungsi, nilai kegunaan, atau manfaat dari objek yang diobservasi bagi kehidupan.</p>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <strong>Ciri Kebahasaan Penting:</strong>
+          <ul>
+            <li><strong>Kalimat Definisi:</strong> Menggunakan verba relasional seperti <em>adalah, merupakan, yaitu, yakni</em>.</li>
+            <li><strong>Kalimat Deskripsi:</strong> Menggambarkan sifat, warna, ukuran, atau kondisi nyata yang dapat ditangkap pancaindra.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: KUIS INTERAKTIF -->
+    <div id="kuis" class="tab-content">
+      <div class="card" id="quiz-wrapper">
+        <div class="quiz-header">
+          <span id="question-tracker" style="font-weight: bold; color: var(--primary-navy);">Soal 1 dari 5</span>
+          <span id="quiz-type-badge" class="badge" style="background: var(--secondary-blue); color: white;">Pilihan Ganda</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div id="question-text" class="question-box">Memuat soal...</div>
+
+        <div id="interactive-area">
+          <!-- Dynamically populated options / inputs -->
+        </div>
+
+        <div id="feedback-box" class="feedback-box">
+          <strong id="feedback-title">Umpan Balik:</strong>
+          <p id="feedback-text"></p>
+        </div>
+
+        <div class="action-btn-group">
+          <button id="submit-btn" class="btn-main" onclick="checkCurrentAnswer()">Periksa Jawaban</button>
+          <button id="next-btn" class="btn-main" onclick="nextQuestion()" style="display: none;">Soal Berikutnya ➔</button>
+        </div>
+      </div>
+
+      <!-- SCORE RESULT CARD (HIDDEN INITIALLY) -->
+      <div class="card score-card" id="score-card" style="display: none;">
+        <h2>Hasil Evaluasi Kuis Interaktif</h2>
+        <p>Selamat! Kamu telah menyelesaikan seluruh latihan soal.</p>
+        <div class="score-number" id="final-score">0</div>
+        <p id="score-message">Pesan evaluasi...</p>
+        <br>
+        <button class="btn-main" onclick="restartQuiz()">Ulangi Kuis</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: REFLEKSI & PETA KONSEP -->
+    <div id="refleksi" class="tab-content">
+      <div class="card">
+        <h2>Peta Konsep Visual Teks LHO</h2>
+        <div class="concept-map">
+          <div class="concept-node">TEKS LAPORAN HASIL OBSERVASI (LHO)</div>
+          <div style="font-weight: bold; color: var(--text-muted);">▼ Struktur Utama</div>
+          <div class="concept-branches">
+            <div class="concept-child">1. Pernyataan Umum<br><small>(Pengenalan & Definisi)</small></div>
+            <div class="concept-child">2. Deskripsi Bagian<br><small>(Rincian Ciri Fizik)</small></div>
+            <div class="concept-child">3. Deskripsi Manfaat<br><small>(Kegunaan & Fungsi)</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Jurnal Refleksi Pembelajaran (Berkesadaran)</h2>
+        <form onsubmit="event.preventDefault(); alert('Terima kasih! Refleksi belajar kamu telah tersimpan.');">
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-weight:600; margin-bottom:0.5rem;">1. Bagian struktur Teks LHO mana yang paling kamu pahami dengan baik?</label>
+            <textarea class="input-answer" rows="3" placeholder="Tuliskan refleksi singkatmu di sini..."></textarea>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label style="display:block; font-weight:600; margin-bottom:0.5rem;">2. Apa tantangan utama saat membedakan kalimat definisi dan kalimat deskripsi?</label>
+            <textarea class="input-answer" rows="3" placeholder="Tuliskan tanggapanmu..."></textarea>
+          </div>
+          <button type="submit" class="btn-main">Simpan Refleksi</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Media Pembelajaran Interaktif Bahasa Indonesia | SMP Negeri 1 Dlingo</p>
+    <p>Guru Pengampu: <strong>Amri Husaini, S.Pd.</strong> | Tahun Pelajaran 2026/2027</p>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // DATA SOAL KUIS VARIASI
+    const quizQuestions = [
+      {
+        type: "pg",
+        typeName: "Pilihan Ganda",
+        question: "Perhatikan kalimat berikut: 'Hutan Pinus Asri Dlingo merupakan salah satu destinasi wisata alam yang terletak di kawasan Kabupaten Bantul.' Kalimat tersebut dalam Teks LHO termasuk ke dalam bagian...",
+        options: [
+          "Deskripsi Bagian",
+          "Pernyataan Umum / Klasifikasi",
+          "Deskripsi Manfaat",
+          "Penutup / Kesimpulan"
+        ],
+        correct: 1,
+        feedbackCorrect: "Tepat sekali! Kalimat tersebut menggunakan kata penanda definisi 'merupakan' yang menjelaskan gambaran umum objek (Pernyataan Umum).",
+        feedbackWrong: "Kurang tepat. Perhatikan adanya kata kunci 'merupakan' yang menandakan pembuka/definisi objek (Pernyataan Umum)."
+      },
+      {
+        type: "tf",
+        typeName: "Benar / Salah",
+        question: "Pernyataan: 'Kalimat deskripsi dalam Teks LHO adalah kalimat yang memberikan gambaran sifat atau ciri-ciri fisik objek yang dapat ditangkap oleh pancaindra.'",
+        options: ["BENAR", "SALAH"],
+        correct: 0,
+        feedbackCorrect: "Jawabanmu Benar! Kalimat deskripsi memang berfungsi menggambarkan kondisi fisik, warna, bentuk, atau sifat objek secara spesifik.",
+        feedbackWrong: "Kurang tepat. Pernyataan di atas adalah definisi yang sah dan benar mengenai kalimat deskripsi."
+      },
+      {
+        type: "isian",
+        typeName: "Isian Singkat",
+        question: "Tuliskan 1 (satu) kata verba relasional/definisi yang biasa digunakan pada bagian Pernyataan Umum! (Contoh: adalah / merupakan / yaitu / yakni)",
+        correctAnswers: ["adalah", "merupakan", "yaitu", "yakni"],
+        feedbackCorrect: "Hebat! Kata tersebut merupakan kata kerja/konjungsi relasional definisi yang baku dalam Teks LHO.",
+        feedbackWrong: "Belum tepat. Contoh kata verba definisi yang standar antara lain: 'adalah', 'merupakan', 'yaitu', atau 'yakni'."
+      },
+      {
+        type: "matching",
+        typeName: "Menjodohkan",
+        question: "Jodohkanlah Bagian Struktur Teks LHO di kiri dengan Fungsi Informasinya di kanan!",
+        pairs: [
+          { left: "1. Pernyataan Umum", rightOpts: ["--Pilih Fungsi--", "A. Menjelaskan nilai kegunaan atau manfaat objek", "B. Memuat rincian detail fisik & ciri khusus objek", "C. Memuat pengenalan, pembuka, atau definisi awal objek"], correctIdx: 3 },
+          { left: "2. Deskripsi Bagian", rightOpts: ["--Pilih Fungsi--", "A. Menjelaskan nilai kegunaan atau manfaat objek", "B. Memuat rincian detail fisik & ciri khusus objek", "C. Memuat pengenalan, pembuka, atau definisi awal objek"], correctIdx: 2 },
+          { left: "3. Deskripsi Manfaat", rightOpts: ["--Pilih Fungsi--", "A. Menjelaskan nilai kegunaan atau manfaat objek", "B. Memuat rincian detail fisik & ciri khusus objek", "C. Memuat pengenalan, pembuka, atau definisi awal objek"], correctIdx: 1 }
+        ],
+        feedbackCorrect: "Sempurna! Kamu telah menjodohkan seluruh bagian struktur Teks LHO dengan fungsinya secara akurat.",
+        feedbackWrong: "Ada pasang pasangan yang belum tepat. Ingat: Pernyataan Umum = Definisi Awal, Deskripsi Bagian = Rincian Fisik, Deskripsi Manfaat = Kegunaan Objek."
+      },
+      {
+        type: "pg",
+        typeName: "Analisis Kebahasaan (PG)",
+        question: "Kalimat manakah di bawah ini yang paling tepat menggambarkan bagian DESKRIPSI MANFAAT pada Laporan Observasi Pohon Kelapa?",
+        options: [
+          "Pohon kelapa (Cocos nucifera) adalah tumbuhan palem tinggi berbatang lurus.",
+          "Daun kelapa dapat dimanfaatkan untuk membuat ketupat, sedangkan batangnya untuk bahan bangunan.",
+          "Batang pohon kelapa tidak memiliki cabang dan berstruktur kasar.",
+          "Buah kelapa terdiri atas sabut, tempurung, daging buah, dan air kelapa."
+        ],
+        correct: 1,
+        feedbackCorrect: "Luar biasa! Pilihan B secara jelas menerangkan nilai guna/manfaat bagian-bagian tumbuhan bagi kehidupan manusia.",
+        feedbackWrong: "Masih kurang tepat. Pilihan A adalah Pernyataan Umum, sedangkan C dan D adalah Deskripsi Bagian fisik."
+      }
+    ];
+
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let userAnswers = {};
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function renderQuestion() {
+      const qData = quizQuestions[currentQuestionIdx];
+      document.getElementById('question-tracker').innerText = `Soal ${currentQuestionIdx + 1} dari ${quizQuestions.length}`;
+      document.getElementById('quiz-type-badge').innerText = qData.typeName;
+      document.getElementById('progress-bar').style.width = `${((currentQuestionIdx + 1) / quizQuestions.length) * 100}%`;
+      document.getElementById('question-text').innerText = qData.question;
+
+      const area = document.getElementById('interactive-area');
+      area.innerHTML = '';
+
+      // Reset feedback and buttons
+      document.getElementById('feedback-box').style.display = 'none';
+      document.getElementById('submit-btn').style.display = 'inline-block';
+      document.getElementById('submit-btn').disabled = false;
+      document.getElementById('next-btn').style.display = 'none';
+
+      if (qData.type === 'pg' || qData.type === 'tf') {
+        const optsList = document.createElement('div');
+        optsList.className = 'options-list';
+        qData.options.forEach((optText, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.innerText = optText;
+          btn.onclick = () => {
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            userAnswers[currentQuestionIdx] = i;
+          };
+          optsList.appendChild(btn);
+        });
+        area.appendChild(optsList);
+      } 
+      else if (qData.type === 'isian') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'input-answer';
+        input.placeholder = 'Ketik jawabanmu di sini...';
+        input.oninput = (e) => {
+          userAnswers[currentQuestionIdx] = e.target.value.trim().toLowerCase();
+        };
+        area.appendChild(input);
+      }
+      else if (qData.type === 'matching') {
+        const container = document.createElement('div');
+        container.className = 'matching-container';
+        qData.pairs.forEach((pair, idx) => {
+          const item = document.createElement('div');
+          item.className = 'matching-item';
+          item.innerHTML = `<strong>${pair.left}</strong>`;
+          
+          const select = document.createElement('select');
+          select.className = 'matching-select';
+          pair.rightOpts.forEach((opt, oIdx) => {
+            select.innerHTML += `<option value="${oIdx}">${opt}</option>`;
+          });
+          select.onchange = (e) => {
+            if(!userAnswers[currentQuestionIdx]) userAnswers[currentQuestionIdx] = {};
+            userAnswers[currentQuestionIdx][idx] = parseInt(e.target.value);
+          };
+
+          item.appendChild(select);
+          container.appendChild(item);
+        });
+        area.appendChild(container);
+      }
+    }
+
+    function checkCurrentAnswer() {
+      const qData = quizQuestions[currentQuestionIdx];
+      const fbBox = document.getElementById('feedback-box');
+      const fbTitle = document.getElementById('feedback-title');
+      const fbText = document.getElementById('feedback-text');
+      let isCorrect = false;
+
+      if (qData.type === 'pg' || qData.type === 'tf') {
+        const selected = userAnswers[currentQuestionIdx];
+        if (selected === undefined) {
+          alert('Pilihlah salah satu jawaban terlebih dahulu!');
+          return;
+        }
+        isCorrect = (selected === qData.correct);
+        
+        // Highlight options
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((b, i) => {
+          b.disabled = true;
+          if (i === qData.correct) b.classList.add('correct-ans');
+          if (i === selected && !isCorrect) b.classList.add('wrong-ans');
+        });
+      }
+      else if (qData.type === 'isian') {
+        const val = userAnswers[currentQuestionIdx];
+        if (!val) {
+          alert('Ketikkan jawabanmu terlebih dahulu!');
+          return;
+        }
+        isCorrect = qData.correctAnswers.includes(val);
+      }
+      else if (qData.type === 'matching') {
+        const ansObj = userAnswers[currentQuestionIdx];
+        if (!ansObj || Object.keys(ansObj).length < 3) {
+          alert('Lengkapi seluruh pilihan jodohkan pasangan di atas!');
+          return;
+        }
+        isCorrect = qData.pairs.every((pair, idx) => ansObj[idx] === pair.correctIdx);
+      }
+
+      // Display Feedback
+      fbBox.style.display = 'block';
+      if (isCorrect) {
+        score += 20; // 5 soal * 20 = 100
+        fbBox.className = 'feedback-box correct';
+        fbTitle.innerText = '✅ Jawaban Benar!';
+        fbText.innerText = qData.feedbackCorrect;
+      } else {
+        fbBox.className = 'feedback-box wrong';
+        fbTitle.innerText = '❌ Jawaban Kurang Tepat';
+        fbText.innerText = qData.feedbackWrong;
+      }
+
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      currentQuestionIdx++;
+      if (currentQuestionIdx < quizQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-wrapper').style.display = 'none';
+      const scoreCard = document.getElementById('score-card');
+      scoreCard.style.display = 'block';
+      document.getElementById('final-score').innerText = score;
+
+      const msg = document.getElementById('score-message');
+      if (score >= 80) {
+        msg.innerText = 'Luar Biasa! Kamu telah memenuhi kriteria ketuntasan (SMART Objective) dalam memahami dan menyusun Teks LHO.';
+      } else {
+        msg.innerText = 'Tetap Semangat! Kamu bisa mempelajari kembali modul materi dan mengulangi kuis ini untuk meningkatkan pemahamanmu.';
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestionIdx = 0;
+      score = 0;
+      userAnswers = {};
+      document.getElementById('score-card').style.display = 'none';
+      document.getElementById('quiz-wrapper').style.display = 'block';
+      renderQuestion();
+    }
+
+    // Initialize first question on load
+    renderQuestion();
+  </script>
+</body>
+</html>
